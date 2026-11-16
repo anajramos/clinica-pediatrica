@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Clínica Pequenos Passos</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 400px; margin: 60px auto; padding: 20px; }
+    input, button { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; }
+    .erro { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Clínica Pequenos Passos</h2>
+  <p>Acesso restrito aos operadores</p>
+
+  <% if (erro) { %>
+    <p class="erro"><%= erro %></p>
+  <% } %>
+
+  <form action="/login" method="POST">
+    <label>CPF:</label>
+    <input type="text" name="cpf" placeholder="Digite apenas números" required>
+
+    <label>Senha:</label>
+    <input type="password" name="senha" required>
+
+    <button type="submit">Entrar</button>
+  </form>
+</body>
+</html>

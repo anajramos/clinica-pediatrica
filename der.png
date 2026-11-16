@@ -1,0 +1,30 @@
+Table usuarios {
+  id int [pk]
+  nome varchar
+  cpf varchar
+  senha_hash varchar
+}
+
+Table responsaveis {
+  id int [pk]
+  nome varchar
+  cpf varchar
+  email varchar
+  telefone varchar
+}
+
+Table criancas {
+  id int [pk]
+  nome varchar
+  data_nascimento date
+  responsavel_id int [ref: > responsaveis.id]
+}
+
+Table atendimentos {
+  id int [pk]
+  crianca_id int [ref: > criancas.id]
+  data_atendimento date
+  horario time
+  motivo varchar
+  situacao varchar
+}

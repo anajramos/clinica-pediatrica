@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Atendimentos</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 950px; margin: 20px auto; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    input, select, button { padding: 6px; margin: 4px 0; }
+    .erro { color: red; font-weight: bold; }
+    .menu { margin-bottom: 20px; }
+    .menu a { margin-right: 15px; }
+  </style>
+</head>
+<body>
+  <div class="menu">
+    <a href="/">Início</a>
+    <a href="/responsaveis">Responsáveis</a>
+    <a href="/criancas">Crianças</a>
+    <a href="/atendimentos">Atendimentos</a>
+    <a href="/logout">Sair (<%= usuario.nome %>)</a>
+  </div>
+
+  <h2><%= atendimentoEditando ? 'Editar Atendimento' : 'Novo Atendimento' %></h2>
+
+  <% if (erro) { %>
+    <p class="erro"><%= erro %></p>
+  <% } %>
+
+  <form action="<%= atendimentoEditando ? '/atendimentos/editar/' + atendimentoEditando.id : '/atendimentos' %>" method="POST">
+    <select name="crianca_id" required>
+      <option value="">Selecione a criança...</option>
+      <% criancas.forEach(c => { %>
+        <option value="<%= c.id %>" <%= (atendimentoEditando && atendimentoEditando.crianca_id === c.id) ? 'selected' : '' %>>
+          <%= c.nome %>
+        </option>
+      <% }) %>
+    </select>
+
+    <input type="date" name="data_atendimento" value="<%= atendimentoEditando ? atendimentoEditando.data_iso : '' %>" required>
+    <input type="time" name="horario" value="<%= atendimentoEditando ? atendimentoEditando.horario_curto : '' %>" required>
+    <input type="text" name="motivo" placeholder="Motivo do atendimento" value="<%= atendimentoEditando ? atendimentoEditando.motivo : '' %>" required>
+
+    <select name="situacao" required>
+      <option value="Agendado" <%= (atendimentoEditando && atendimentoEditando.situacao === 'Agendado') ? 'selected' : '' %>>Agendado</option>
+      <option value="Confirmado" <%= (atendimentoEditando && atendimentoEditando.situacao === 'Confirmado') ? 'selected' : '' %>>Confirmado</option>
+      <option value="Realizado" <%= (atendimentoEditando && atendimentoEditando.situacao === 'Realizado') ? 'selected' : '' %>>Realizado</option>
+      <option value="Cancelado" <%= (atendimentoEditando && atendimentoEditando.situacao === 'Cancelado') ? 'selected' : '' %>>Cancelado</option>
+    </select>
+
+    <button type="submit"><%= atendimentoEditando ? 'Salvar Alterações' : 'Agendar' %></button>
+    <% if (atendimentoEditando) { %>
+      <a href="/atendimentos">Cancelar</a>
+    <% } %>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Horário</th>
+        <th>Criança</th>
+        <th>Responsável</th>
+        <th>Motivo</th>
+        <th>Situação</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% atendimentos.forEach(a => { %>
+        <tr>
+          <td><%= a.data_br %></td>
+          <td><%= a.horario_curto %></td>
+          <td><%= a.crianca_nome %></td>
+          <td><%= a.responsavel_nome %></td>
+          <td><%= a.motivo %></td>
+          <td><%= a.situacao %></td>
+          <td>
+            <a href="/atendimentos?editar=<%= a.id %>">Editar</a>
+            <form action="/atendimentos/excluir/<%= a.id %>" method="POST" style="display:inline;">
+              <button type="submit" onclick="return confirm('Excluir este atendimento?')">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Crianças</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    input, select, button { padding: 6px; margin: 4px 0; }
+    .erro { color: red; font-weight: bold; }
+    .menu { margin-bottom: 20px; }
+    .menu a { margin-right: 15px; }
+  </style>
+</head>
+<body>
+  <div class="menu">
+    <a href="/">Início</a>
+    <a href="/responsaveis">Responsáveis</a>
+    <a href="/criancas">Crianças</a>
+    <a href="/atendimentos">Atendimentos</a>
+    <a href="/logout">Sair (<%= usuario.nome %>)</a>
+  </div>
+
+  <h2><%= criancaEditando ? 'Editar Criança' : 'Cadastrar Criança' %></h2>
+
+  <% if (erro) { %>
+    <p class="erro"><%= erro %></p>
+  <% } %>
+
+  <form action="<%= criancaEditando ? '/criancas/editar/' + criancaEditando.id : '/criancas' %>" method="POST">
+    <input type="text" name="nome" placeholder="Nome da criança" value="<%= criancaEditando ? criancaEditando.nome : '' %>" required>
+    <input type="date" name="data_nascimento" value="<%= criancaEditando ? criancaEditando.data_nascimento_iso : '' %>" required>
+
+    <select name="responsavel_id" required>
+      <option value="">Selecione o responsável...</option>
+      <% responsaveis.forEach(r => { %>
+        <option value="<%= r.id %>" <%= (criancaEditando && criancaEditando.responsavel_id === r.id) ? 'selected' : '' %>>
+          <%= r.nome %>
+        </option>
+      <% }) %>
+    </select>
+
+    <button type="submit"><%= criancaEditando ? 'Salvar Alterações' : 'Cadastrar' %></button>
+    <% if (criancaEditando) { %>
+      <a href="/criancas">Cancelar</a>
+    <% } %>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome da Criança</th>
+        <th>Data de Nascimento</th>
+        <th>Responsável</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% criancas.forEach(c => { %>
+        <tr>
+          <td><%= c.id %></td>
+          <td><%= c.nome %></td>
+          <td><%= c.data_nascimento_br %></td>
+          <td><%= c.responsavel_nome %></td>
+          <td>
+            <a href="/criancas?editar=<%= c.id %>">Editar</a>
+            <form action="/criancas/excluir/<%= c.id %>" method="POST" style="display:inline;">
+              <button type="submit" onclick="return confirm('Excluir esta criança?')">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>

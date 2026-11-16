@@ -1,0 +1,19 @@
+PROJETO: Sistema de Gestão - Clínica Pediátrica Pequenos Passos
+
+1. TECNOLOGIAS E INFRAESTRUTURA
+- Ambiente de execução: Node.js (com módulos ES import/export)
+- Framework Web e Template Engine: Express + EJS (renderização no servidor)
+- Banco de Dados: PostgreSQL (porta 7777 no laboratório)
+- Servidor HTTP: Express rodando na porta 3000 (http://localhost:3000)
+- Segurança: bcrypt (hash de senhas), crypto AES-256-CBC (criptografia reversível de CPF), express-session (sessão com expiração) e consultas parametrizadas ($1, $2...).
+
+2. REQUISITOS FUNCIONAIS IMPLEMENTADOS
+- RF01 (Autenticação): Login com CPF e senha, exibindo mensagem genérica em caso de erro.
+- RF02 (Página inicial): Exibe o nome do operador logado, menu para os módulos e opção de sair.
+- RF03 (Responsáveis): Cadastro, listagem, edição e exclusão de responsáveis (nome, CPF, e-mail, telefone).
+- RF04 (Busca): Pesquisa parcial de responsáveis por nome (ILIKE) com atualização da listagem.
+- RF05 (Crianças): Cadastro, listagem, edição e exclusão de crianças vinculadas a um responsável do banco.
+- RF06 (Atendimentos): Cadastro, listagem, edição e exclusão de atendimentos vinculados a uma criança do banco.
+- RF07 (Listagem completa): Exibição de data, horário, motivo, situação, nome da criança e nome do responsável usando JOIN.
+- RF08 (Ordenação): Listagem de atendimentos ordenada cronologicamente por data e horário (ORDER BY data_atendimento ASC, horario ASC).
+- RF09 (Sessão): Proteção de rotas internas contra acesso sem login, expiração automática de sessão e logout funcional.
